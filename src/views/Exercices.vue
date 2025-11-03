@@ -1,97 +1,41 @@
 <script setup>
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
+import OneFriend from '../components/OneFriend2.vue'
 
-//Watcher
+const lesAmis = ref([
+    { id: '001', name: 'Janine De La Vega', phone: '01234 5678 991', email: 'janine@delavega.com', premium: false },
+    { id: '002', name: 'Eric Reptile', phone: '01234 5678 991', email: 'eric@reptile.com', premium: false },
+    { id: '003', name: 'Jean Kreps', phone: '+338765477', email: 'jean@kreps.com', premium: true },
+    { id: '004', name: 'Goulive', phone: '+338765477', email: 'goulive@seagal.com', premium: true },
+    { id: '005', name: 'JAROD', phone: '+338765477', email: 'jarod@seagal.com', premium: true },
+    { id: '006', name: 'GussDX', phone: '+338765477', email: 'gussdx@seagal.com', premium: true }
+])
 
-const nombre = ref(0)
-
-function incrementer() {
-    nombre.value++
+const updatePremiumInParent = (id) => {
+    const ami = lesAmis.value.find(p => p.id === id)
+    if (ami) ami.premium = !ami.premium
 }
-
-watch(nombre, (nouvelleValeur, ancienneValeur) => {
-    if (nouvelleValeur === 7) {
-        nombre.value = 0
-    }
-})
-
-//Dynamic
-
-const isActive1 = ref(false)
-const isActive2 = ref(false)
-
-function toggleCard1() {
-    isActive1.value = !isActive1.value
-}
-function toggleCard2() {
-    isActive2.value = !isActive2.value
-}
-
-const isColored1 = ref(false)
-const isColored2 = ref(false)
-
-function toggleColor1() {
-    isColored1.value = !isColored1.value
-}
-function toggleColor2() {
-    isColored2.value = !isColored2.value
-}
-
 </script>
 
 <template>
     <div>
-        <h1>Exercice Watcher</h1>
-        <p>Valeur actuelle :<span>{{ nombre }}</span></p>
-        <button @click="incrementer">Incrémenter</button>
-    </div>
+        <h2>EXO EMIT 1</h2>
 
-    <div>
-        <h1>Dynamic Styling</h1>
-        <h2>CSS</h2>
-        <div class="grid grid-cols-2 gap-6 mb-12">
-            <div class="card" :class="{ fancy: isActive1 }" @click="toggleCard1">
-                <p>Carte 1</p>
-            </div>
-            <div class="card" :class="{ noble: isActive2 }" @click="toggleCard2">
-                <p>Carte 2</p>
-            </div>
-        </div>
-        <h2>Dynamique</h2>
-        <div class="grid grid-cols-2 gap-6 mb-12">
-            <div class="card" :style="{ background: isColored1? 'cyan' : 'white'}" @click="toggleColor1">
-                <p>Carte 3</p>
-            </div>
-            <div class="card" :style="{ background: isColored2? 'orange' : 'white'}" @click="toggleColor2">
-                <p>Carte 4</p>
-            </div>
+        <div class="amis-container">
+        <OneFriend
+            v-for="unPote in lesAmis"
+            :key="unPote.id"
+            v-bind="unPote"
+            @mon-event-premium-update="updatePremiumInParent"
+        />
         </div>
     </div>
 </template>
 
 <style scoped>
 
-div {
-    margin: 30px 0;
-    padding: 10px 0;
-}
-
-.card {
-    background-color: white;
-    color: black;
-    padding: 10px;
-}
-
-.fancy {
-    background-color: red;
-    color: white;
-    transform: scale(1.05);
-}
-
-.noble {
-    background-color: blue;
-    color: white;
-    transform: scale(1.05);
+.amis-container {
+    flex-direction: column;
 }
 
 </style>
