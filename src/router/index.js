@@ -72,7 +72,15 @@ const router = createRouter({
             path: '/inline',
             name: 'inline',
             component: InlineTemplating
-        }
+        },
+        {
+            path: '/:pathMatch(.*)*',
+            name: 'not-found',
+            meta: {
+                description: 'Page non trouvée'
+            },
+            component: () => import('../components/not-found.vue')
+        },
     ]
 })
 

@@ -2,72 +2,79 @@
 import { ref } from 'vue'
 
 const props = defineProps({
-    id: { type: String, required: true },
-    name: { type: String, required: true },
-    phone: { type: String, required: true },
-    email: { type: String, required: true },
-    premium: { type: Boolean, default: false }
+  id: { type: String, required: true },
+  name: { type: String, required: true },
+  phone: { type: String, required: true },
+  email: { type: String, required: true },
+  premium: { type: Boolean, default: false }
 })
 
-const emit = defineEmits(['mon-event-premium-update'])
+const emit = defineEmits(['mon-event-premium-update', 'delete-friend'])
 
 const showDetails = ref(false)
-const unAmiPremium = ref(props.premium)
 
 const toggleDetails = () => {
-    showDetails.value = !showDetails.value
+  showDetails.value = !showDetails.value
 }
 
 const updatePremium = () => {
-    unAmiPremium.value = !unAmiPremium.value
-    emit('mon-event-premium-update', props.id)
+  emit('mon-event-premium-update', props.id)
+}
+
+const deleteFriend = () => {
+  emit('delete-friend', props.id)
 }
 </script>
 
 <template>
-    <div class="friend-card">
-        <h3>{{ name }}</h3>
+  <div class="friend-card">
+    <h3>{{ name }}</h3>
 
-        <p>
-            <span class="badge" :class="unAmiPremium ? 'premium-badge' : 'standard-badge'">
-                {{ unAmiPremium ? 'Ami en or' : 'Ami en Plomb' }}
-            </span>
-        </p>
+    <p>
+      <span class="badge" :class="premium ? 'premium-badge' : 'standard-badge'">
+        {{ premium ? 'Ami en or' : 'Ami en plomb' }}
+      </span>
+    </p>
 
-        <div v-if="showDetails" class="details">
-            <p>Téléphone : {{ phone }}</p>
-            <p>Email : {{ email }}</p>
-        </div>
-
-        <div class="actions">
-            <button class="btn" @click="updatePremium">
-                {{ unAmiPremium ? 'Rétrograder' : 'Promouvoir' }}
-            </button>
-            <button class="btn" @click="toggleDetails">
-                {{ showDetails ? 'Masquer Détails' : 'Afficher Détails' }}
-            </button>
-        </div>
+    <div v-if="showDetails" class="details">
+      <p>Téléphone : {{ phone }}</p>
+      <p>Email : {{ email }}</p>
     </div>
+
+    <div class="actions">
+      <button class="btn" @click="updatePremium">
+        {{ premium ? 'Rétrograder' : 'Promouvoir' }}
+      </button>
+      <button class="btn" @click="toggleDetails">
+        {{ showDetails ? 'Masquer Détails' : 'Afficher Détails' }}
+      </button>
+      <button class="btn" @click="deleteFriend">
+        Supprimer
+      </button>
+    </div>
+  </div>
 </template>
 
 <style scoped>
-
 .friend-card {
-    background-color: lightgrey;
-    color: black;
-    padding: 16px;
-    margin: 16px;
-    border-radius: 20px;
+  background-color: lightgrey;
+  color: black;
+  padding: 16px;
+  margin: 16px;
+  border-radius: 20px;
 }
 
 .btn {
-    background-color: rgb(0, 146, 146);
-    margin: 5px;
+  background-color: rgb(0, 146, 146);
+  margin: 5px;
 }
 
 .premium-badge {
-    background-color: gold;
-    color: black;
+  background-color: gold;
+  color: black;
 }
-
+.standard-badge {
+  background-color: silver;
+  color: black;
+}
 </style>

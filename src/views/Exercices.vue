@@ -15,6 +15,10 @@ const updatePremiumInParent = (id) => {
     const ami = lesAmis.value.find(p => p.id === id)
     if (ami) ami.premium = !ami.premium
 }
+
+const deleteFriendInParent = (id) => {
+  lesAmis.value = lesAmis.value.filter(p => p.id !== id)
+}
 </script>
 
 <template>
@@ -27,6 +31,7 @@ const updatePremiumInParent = (id) => {
             :key="unPote.id"
             v-bind="unPote"
             @mon-event-premium-update="updatePremiumInParent"
+            @delete-friend="deleteFriendInParent"
         />
         </div>
     </div>
