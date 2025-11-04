@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-import OneFriend from '../components/OneFriend2.vue'
+import OneFriend from '../../components/OneFriend2.vue'
 
 const lesAmis = ref([
     { id: '001', name: 'Janine De La Vega', phone: '01234 5678 991', email: 'janine@delavega.com', premium: false },

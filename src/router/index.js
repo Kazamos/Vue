@@ -1,87 +1,81 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Home from '../views/Home.vue'
-import Contact from '../views/Contact.vue'
-import About from '../views/About.vue';
-import TextInterpolation from '../views/Lesson/TextInterpolation.vue'
-import Exercices from '../views/Exercices.vue';
-import Lessons from '../views/Lessons.vue';
-import Login from '../views/Login.vue';
-import Profile from '../views/Profile.vue';
-import Skills from '../views/Skills.vue';
-import TP from '../views/TP.vue';
-import InlineTemplating from '../views/Lesson/inline-templating.vue';
 
+// -----------------------------
+// 🔹 1. Routes automatiques
+// -----------------------------
+const exercicesModules = import.meta.glob('../views/Exercices/*.vue')
+const lessonsModules = import.meta.glob('../views/Lessons/*.vue')
+const tpModules = import.meta.glob('../views/TP/*.vue')
 
+// Fonction utilitaire pour générer des routes
+const makeRoutes = (modules, basePath) => {
+  return Object.keys(modules).map((path) => {
+    const name = path.split('/').pop().replace('.vue', '')
+    return {
+      path: `${basePath}/${name.toLowerCase()}`,
+      name: name,
+      component: modules[path],
+    }
+  })
+}
 
+// Génération automatique des groupes
+const exercicesRoutes = makeRoutes(exercicesModules, '/exercices')
+const lessonsRoutes = makeRoutes(lessonsModules, '/lessons')
+const tpRoutes = makeRoutes(tpModules, '/tp')
+
+// -----------------------------
+// 🔹 2. Routes manuelles
+// -----------------------------
+const manualRoutes = [
+  {
+    path: '/',
+    name: 'home',
+    component: () => import('../views/Home/Home.vue'),
+  },
+  {
+    path: '/about',
+    name: 'about',
+    component: () => import('../views/About/About.vue'),
+  },
+  {
+    path: '/contact',
+    name: 'contact',
+    component: () => import('../views/Contact/Contact.vue'),
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: () => import('../views/Login/Login.vue'),
+  },
+  {
+    path: '/profile',
+    name: 'profile',
+    component: () => import('../views/Profile/Profile.vue'),
+  },
+  {
+    path: '/skills',
+    name: 'skills',
+    component: () => import('../views/Skills/Skills.vue'),
+  },
+]
+
+// -----------------------------
+// 🔹 3. Fusion des routes
+// -----------------------------
+const routes = [
+  ...manualRoutes,
+  ...exercicesRoutes,
+  ...lessonsRoutes,
+  ...tpRoutes,
+]
+
+// -----------------------------
+// 🔹 4. Création du routeur
+// -----------------------------
 const router = createRouter({
-    history: createWebHistory(),
-    routes:[
-        // La on a une route pour notre page / (l'accueil)
-        {
-            path: '/',
-            alias: '/home',
-            name: 'home',
-            component: Home
-        },
-        {
-            path: '/contact',
-            name: 'contact',
-            component: Contact
-        },
-        {
-            path: '/about',
-            name: 'about',
-            component: About
-        },
-        {
-            path: '/textinterpolation',
-            name: 'textinterpolation',
-            component: TextInterpolation
-        },
-        {
-            path: '/exercices',
-            name: 'exercices',
-            component: Exercices
-        },
-        {
-            path: '/lessons',
-            name: 'lessons',
-            component: Lessons
-        },
-        {
-            path: '/login',
-            name: 'login',
-            component: Login
-        },
-        {
-            path: '/profile',
-            name: 'profile',
-            component: Profile
-        },
-        {
-            path: '/skills',
-            name: 'skills',
-            component: Skills
-        },
-        {
-            path: '/tp',
-            name: 'tp',
-            component: TP
-        },
-        {
-            path: '/inline',
-            name: 'inline',
-            component: InlineTemplating
-        },
-        {
-            path: '/:pathMatch(.*)*',
-            name: 'not-found',
-            meta: {
-                description: 'Page non trouvée'
-            },
-            component: () => import('../components/not-found.vue')
-        },
-    ]
+  history: createWebHistory(),
+  routes,
 })
 
-export default router;
+export default router

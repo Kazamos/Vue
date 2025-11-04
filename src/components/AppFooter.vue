@@ -1,5 +1,5 @@
 <template>
-  <footer class="fixed bottom-0 left-0 w-full">
+  <footer class="fixed bottom-0 bg-[#2e2e2e] left-0 w-full">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between h-16 text-sm">
       
       <!-- Texte / copyright -->

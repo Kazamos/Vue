@@ -1,33 +1,100 @@
 <script setup>
+import { ref, computed } from 'vue'
+import { useRouter, RouterLink } from 'vue-router'
 
+const router = useRouter()
+const openDropdown = ref(null) // Stocke le nom du menu ouvert
+
+// Récupérer toutes les routes
+const routes = computed(() => router.getRoutes())
+
+// Regrouper automatiquement par dossier
+const groupedRoutes = computed(() => {
+const groups = {
+    Exercices: [],
+    Lessons: [],
+    TP: [],
+}
+
+routes.value.forEach((r) => {
+    if (r.path.startsWith('/exercices/')) groups.Exercices.push(r)
+    else if (r.path.startsWith('/lessons/')) groups.Lessons.push(r)
+    else if (r.path.startsWith('/tp/')) groups.TP.push(r)
+})
+
+// Tri alphabétique
+Object.keys(groups).forEach((key) => {
+    groups[key].sort((a, b) => a.name.localeCompare(b.name))
+})
+
+return groups
+})
+
+// Liens statiques
+const staticLinks = [
+{ name: 'Skills', path: '/skills' },
+{ name: 'Login', path: '/login' },
+{ name: 'Profile', path: '/profile' },
+{ name: 'About', path: '/about' },
+{ name: 'Contact', path: '/contact' },
+]
+
+// Fonction de toggle (ouvre/ferme le menu)
+const toggleDropdown = (menuName) => {
+openDropdown.value = openDropdown.value === menuName ? null : menuName
+}
 </script>
 
 <template>
-  <header class="fixed top-0 left-0 w-full">
+<header class="fixed top-0 left-0 w-full bg-[#2e2e2e] z-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
 
-      <div class="flex items-center space-x-2">
-        <h1><RouterLink to="/home" class="hover:text-blue-600 transition">MonApp</RouterLink></h1>
-      </div>
+<!-- Logo / Titre -->
+        <h1 class="text-xl font-bold">
+            <RouterLink to="/home" class="hover:text-blue-600 transition">MonApp</RouterLink>
+        </h1>
 
-      <nav class="hidden md:flex space-x-6">
-        <RouterLink to="/textinterpolation" class="hover:text-blue-600 transition">TextInterpolation</RouterLink>
-        <RouterLink to="/inline" class="hover:text-blue-600 transition">InlineTemplating</RouterLink>
-        <RouterLink to="/about" class="hover:text-blue-600 transition">À propos</RouterLink>
-        <RouterLink to="/lessons" class="hover:text-blue-600 transition">Lessons</RouterLink>
-        <RouterLink to="/exercices" class="hover:text-blue-600 transition">Exercices</RouterLink>
-        <RouterLink to="/tp" class="hover:text-blue-600 transition">TP</RouterLink>
-        <RouterLink to="/contact" class="hover:text-blue-600 transition">Contact</RouterLink>
-        <RouterLink to="/login" class="hover:text-blue-600 transition">Login</RouterLink>
-        <RouterLink to="/profile" class="hover:text-blue-600 transition">Profile</RouterLink>
-        <RouterLink to="/skills" class="hover:text-blue-600 transition">Skills</RouterLink>
-      </nav>
+<!-- Navigation -->
+        <nav class="hidden md:flex space-x-6 relative">
+
+            <RouterLink :key="`/`" :to="`/`" >Home</RouterLink>
+        
+<!-- Menus dynamiques -->
+            <div v-for="(group, name) in groupedRoutes" :key="name" class="relative">
+                <button class="btn-Header" @click="toggleDropdown(name)">
+                    {{ name }}
+                    <span class="ml-1 text-sm">▼</span>
+                </button>
+
+                <transition name="fade">
+                    <div v-if="openDropdown === name" class="absolute left-0 mt-2 bg-[#2e2e2e] border rounded shadow-lg w-48 z-10">
+                        <RouterLink v-for="r in group" :key="r.path" :to="r.path" class="block px-4 py-2 hover:bg-blue-100 transition" @click="openDropdown = null">
+                            {{ r.name }}
+                        </RouterLink>
+                    </div>
+                </transition>
+            </div>
+
+<!-- Liens statiques -->
+            
+            <RouterLink v-for="link in staticLinks" :key="link.path" :to="link.path" class="hover:text-blue-600 transition">
+                {{ link.name }}
+            </RouterLink>
+        </nav>
     </div>
-  </header>
+</header>
 </template>
 
 <style scoped>
 header {
-  backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+}
+
+.fade-enter-active, .fade-leave-active {
+    transition: opacity 0.15s ease;
+}
+
+.fade-enter-from, .fade-leave-to {
+    opacity: 0;
 }
 </style>
