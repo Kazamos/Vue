@@ -67,6 +67,7 @@ const deleteFriend = () => {
 .btn {
   background-color: rgb(0, 146, 146);
   margin: 5px;
+  color: aliceblue;
 }
 
 .premium-badge {

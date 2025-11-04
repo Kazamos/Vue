@@ -41,10 +41,10 @@ h1 {
 .btn-Header {
   border: none;
   padding: 0;
+  color: #646cff;
 }
 
 button {
-  color: #646cff;
   padding: 5px 15px;
   border-width: 4px;
   border-color: white;

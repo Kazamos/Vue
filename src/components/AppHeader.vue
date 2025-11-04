@@ -46,18 +46,18 @@ openDropdown.value = openDropdown.value === menuName ? null : menuName
 </script>
 
 <template>
-<header class="fixed top-0 left-0 w-full bg-[#2e2e2e] z-50">
+<header class="fixed top-0 left-0 w-full bg-[#2e2e2e] mb-5 p-5 z-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
 
 <!-- Logo / Titre -->
         <h1 class="text-xl font-bold">
-            <RouterLink to="/home" class="hover:text-blue-600 transition">MonApp</RouterLink>
+            <RouterLink to="/" class="hover:text-blue-600 transition">MonApp</RouterLink>
         </h1>
 
 <!-- Navigation -->
         <nav class="hidden md:flex space-x-6 relative">
 
-            <RouterLink :key="`/`" :to="`/`" >Home</RouterLink>
+            <RouterLink to="/" >Home</RouterLink>
         
 <!-- Menus dynamiques -->
             <div v-for="(group, name) in groupedRoutes" :key="name" class="relative">

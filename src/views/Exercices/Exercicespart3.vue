@@ -17,7 +17,7 @@ const updatePremiumInParent = (id) => {
 }
 
 const deleteFriendInParent = (id) => {
-  lesAmis.value = lesAmis.value.filter(p => p.id !== id)
+    lesAmis.value = lesAmis.value.filter(p => p.id !== id)
 }
 </script>
 
